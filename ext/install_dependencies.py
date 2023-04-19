@@ -689,6 +689,10 @@ def install_deimos(target_dir, repo_path=None, branch=None, overwrite=False, ins
 
     install_commands = []
 
+    # Prepare conda env
+    conda_env_commands = get_conda_env_init_commands(anaconda_bin, env_name=env_name)
+    install_commands.extend(conda_env_commands)
+
     # Install dependencies
     pip_packages = [
         "odeintw",
@@ -904,9 +908,6 @@ def install_analysis_software(
     commands.append("\n# Conda env")
     commands.extend(conda_env_setup_commands)
 
-    commands.append("\n# fridge env")
-    commands.append( "source " + os.path.join( this_dir_path, "..", "setup_fridge.sh") )
-
     if mceq :
         commands.append("\n# MCEq env")
         commands.extend(mceq_setup_commands)
@@ -1001,7 +1002,7 @@ if __name__ == "__main__" :
     pisa_kw = {
         "repo_path" : "git@github.com:ts4051/pisa.git",
         "branch" : "master", 
-        "pisa_resources" : [ os.path.join( this_repo_dir, "data" )], # Add a data directory
+        "pisa_resources" : [ os.path.join( this_repo_dir )], # Use resources in this repo
     }
 
     # Steer MCEq installation
