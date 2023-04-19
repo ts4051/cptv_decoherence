@@ -919,6 +919,10 @@ def install_analysis_software(
     commands.append("\n# PISA env")
     commands.extend(pisa_setup_commands)
 
+    if deimos :
+        commands.append("\n# DEIMOS env")
+        commands.extend(deimos_setup_commands)
+
     # Add any custom uder setup commands
     if setup_commands is not None :
         commands.extend(setup_commands)
