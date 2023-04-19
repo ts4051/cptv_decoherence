@@ -4,6 +4,11 @@ Recipe to install analysis software for CPT-V decoherence study
 
 import os, subprocess, collections, datetime, sys, argparse
 
+# Handle change over time in `collections` module
+try :
+    from collections.abc import Sequence # Required as of py3.10
+except Exception as e :
+    from collections import Sequence # Required in py2, works for py<3.10
 
 #
 # Tools
@@ -562,7 +567,7 @@ def install_pisa(anaconda_bin, env_name, target_dir, repo_path=None, branch=None
 
     # Check PISA resource format
     if pisa_resources is not None :
-        assert isinstance(pisa_resources,collections.Sequence)
+        assert isinstance(pisa_resources,Sequence)
 
 
     #
@@ -731,7 +736,7 @@ def generate_setup_script(script_path, commands) :
     '''
 
     # Check inputs
-    assert isinstance(commands,collections.Sequence)
+    assert isinstance(commands,Sequence)
 
     # Start by adding bash shebang
     script_contents = '#!/bin/bash\n'
@@ -842,7 +847,7 @@ def install_analysis_software(
 
     # Check setup commands format (should be a list of strings)
     if setup_commands is not None :
-        assert isinstance(setup_commands,collections.Sequence)
+        assert isinstance(setup_commands,Sequence)
         assert all([ isinstance(c,str) for c in setup_commands ])
 
 
@@ -1027,6 +1032,7 @@ if __name__ == "__main__" :
     # Add this repo to python path
     print("This repo dir : %s" % this_repo_dir)
     setup_commands = [
+        "\n# cptv_decoherence env",
         "export CPTV_DECOH_DIR=" + this_repo_dir,
         "export PYTHONPATH=$CPTV_DECOH_DIR:$PYTHONPATH",
     ]
