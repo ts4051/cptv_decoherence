@@ -921,7 +921,7 @@ def install_analysis_software(
 
     # Add any custom uder setup commands
     if setup_commands is not None :
-        commands.extend(commands)
+        commands.extend(setup_commands)
 
     # Generate the script
     generate_setup_script(
