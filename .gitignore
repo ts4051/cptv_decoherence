@@ -1,3 +1,13 @@
+# Output files
+*.pdf
+*.json
+
+# External dependencies and related scripts
+ext/MCEq
+ext/deimos
+ext/pisa
+setup.sh
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,0 +1,24 @@
+{
+  "method": {
+    "value": "L-BFGS-B",
+    "desc" : "https://docs.scipy.org/doc/scipy/reference/optimize.minimize-lbfgsb.html"
+  },
+  "options":{
+    "value": {
+      "disp"   : 0,
+      "ftol"   : 1.0e-4,
+      "gtol"   : 1.0e-4,
+      "eps"    : 1.0e-4,
+      "maxfun" : 15000,
+      "maxiter": 15000
+    },
+    "desc": {
+      "disp"   : "TODO",
+      "ftol"   : "TODO",
+      "gtol"   : "TODO",
+      "eps"    : "TODO",
+      "maxfun" : "TODO",
+      "maxiter": "TODO"
+    }
+  }
+}
