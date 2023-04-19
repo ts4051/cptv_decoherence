@@ -128,7 +128,7 @@ fig.tight_layout()
 
 
 #
-# Fitting
+# Fitting/scanning
 #
  
 # For fitting we need to configure a minimizer, several standard cfgs are available, but you can also define your own.
@@ -138,46 +138,59 @@ fig.tight_layout()
 # minimizer_cfg = pisa.utils.fileio.from_file('settings/minimizer/slsqp_ftol1e-6_eps1e-4_maxiter1000.json')
 minimizer_cfg = pisa.utils.fileio.from_file('cptv_decoherence/settings/minimizer.json')
 
+# Define output file
+results_file = os.path.abspath("results.json")
 
 # Create analysis class
 ana = Analysis()
 
-print("\nRun fit....")
-result = ana.fit_hypo(
-    data,
-    template_maker,
-    metric=METRIC,
-    minimizer_settings=minimizer_cfg,
-    fit_octants_separately=True, # This fits both theta23 octants separately and chooses the best
-)
+# Choose whether to scan, or fit
+scan = True
 
+if scan :
 
-#
-# Store results
-#
+    #
+    # Scan
+    #
 
-# Save the fit results to a file
-results_file = os.path.abspath("results.json")
-pisa.utils.fileio.to_file(result, results_file)
+    result = ana.scan(
+        data_dist=data,
+        hypo_maker=template_maker,
+        metric=METRIC,
+        minimizer_settings=minimizer_cfg,
+        fit_octants_separately=True, # This fits both theta23 octants separately and chooses the best
+        param_names=["theta23", "deltam31"],
+        values=[[40., 45., 50.]*ureg["degree"], [2.4e-3, 2.5e-3, 2.6e-3]*ureg["eV**2"]],
+        outer=True, # Produce a grid from the scan values
+        outfile=results_file,
+    )
 
+    print(result)
 
-#
-# Check results
-#
+else :
 
-# Here we can view the bestfit parameters - the result of our fit.
-# We have run two fits (separately for each theta23 octant), and the best result is stored in `results[0]` (both fits are also available under `results[1]`)
+    #
+    # Fit
+    #
 
-# Grab fit results
-bestfit_params = result[0]['params'].free
-print("\nFit results :")
-for p in bestfit_params :
-    print("  %s = %s (nominal = %s)" % (p.name, p.value, p.nominal_value))
-print("  %s = %s" % (result[0]["metric"], result[0]["metric_val"]))
-print("")
+    result = ana.fit_hypo(
+        data_dist=data,
+        hypo_maker=template_maker,
+        metric=METRIC,
+        minimizer_settings=minimizer_cfg,
+        fit_octants_separately=True, # This fits both theta23 octants separately and chooses the best
+    )
 
-# Plot best fit histogram
-#TODO
+    # Save to file
+    pisa.utils.fileio.to_file(result, results_file) # Save
+
+    # Report fit results
+    bestfit_params = result[0]['params'].free
+    print("\nFit results :")
+    for p in bestfit_params :
+        print("  %s = %s (nominal = %s)" % (p.name, p.value, p.nominal_value))
+    print("  %s = %s" % (result[0]["metric"], result[0]["metric_val"]))
+    print("")
 
 
 #
