@@ -80,9 +80,10 @@ class IceCubeAnalysis(Analysis) :
         os.makedirs(self.output_dir)
 
         # Define where to find minimizer configuration
-        self.minimizer_cfg = pisa.utils.fileio.from_file('cptv_decoherence/settings/minimizer.json')
-
-        # Other minimizer condig
+        # self.minimizer_cfg = pisa.utils.fileio.from_file('cptv_decoherence/settings/minimizer.json')
+        self.minimizer_cfg = pisa.utils.fileio.from_file('settings/minimizer/slsqp_ftol1e-6_eps1e-4_maxiter1000.json')
+        
+        # Other minimizer config
         self.fit_octants_separately = True # This fits both theta23 octants separately and chooses the best
 
 
