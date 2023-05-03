@@ -64,11 +64,12 @@ PARAMS_TO_USE = [
 
 class IceCubeAnalysis(Analysis) :
 
-    def __init__(self, output_dir, real_data=False) :
+    def __init__(self, output_dir, real_data=False, osc_solver=None) :
 
         # Store args
         self.output_dir = output_dir
         self.real_data = real_data
+        self.osc_solver = osc_solver
 
         #
         # Basic config
@@ -91,9 +92,14 @@ class IceCubeAnalysis(Analysis) :
         # Load model (e.g. the MC expectation for our data)
         #
 
+        # Choose osc solver
+        if self.osc_solver is None :
+            self.osc_solver = "prob3"
+        assert self.osc_solver in ["prob3", "nusquids", "deimos"], "Unknown osc solver : %s" % self.osc_solver
+
         # We can now instantiate the `model` (given our configs) that we later fit to data. This now containes two `Pipelines` in a `DistributionMaker`, one for our neutrinos, and one for the background muons.
         # template_maker = DistributionMaker(["settings/pipeline/IceCube_3y_neutrinos.cfg", "settings/pipeline/IceCube_3y_muons.cfg"])
-        self.template_cfgs = ["cptv_decoherence/settings/pipeline_deepcore_nu_mc.cfg", "cptv_decoherence/settings/pipeline_deepcore_mu_mc.cfg"]
+        self.template_cfgs = ["cptv_decoherence/settings/pipeline_deepcore_nu_mc_%s.cfg"%self.osc_solver, "cptv_decoherence/settings/pipeline_deepcore_mu_mc.cfg"]
         self.template_maker = DistributionMaker(self.template_cfgs)
         print("\nTemplate maker:")
         print(self.template_maker)

@@ -34,9 +34,14 @@ if __name__ == "__main__" :
     # Init analysis
     #
 
+    # Choose osc solver
+    osc_solver = "deimos"
+
+    # Init analysis class
     analysis = IceCubeAnalysis(
         output_dir=args.output_dir,
         real_data=args.real_data,
+        osc_solver=osc_solver,
     )    
 
 
