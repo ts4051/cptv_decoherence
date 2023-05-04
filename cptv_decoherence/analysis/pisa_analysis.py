@@ -95,7 +95,7 @@ class IceCubeAnalysis(Analysis) :
         # Choose osc solver
         if self.osc_solver is None :
             self.osc_solver = "prob3"
-        assert self.osc_solver in ["prob3", "nusquids", "deimos"], "Unknown osc solver : %s" % self.osc_solver
+        assert self.osc_solver in ["prob3", "nusquids", "deimos", "decoh_nusquids"], "Unknown osc solver : %s" % self.osc_solver
 
         # We can now instantiate the `model` (given our configs) that we later fit to data. This now containes two `Pipelines` in a `DistributionMaker`, one for our neutrinos, and one for the background muons.
         # template_maker = DistributionMaker(["settings/pipeline/IceCube_3y_neutrinos.cfg", "settings/pipeline/IceCube_3y_muons.cfg"])
@@ -149,7 +149,16 @@ class IceCubeAnalysis(Analysis) :
         Plot the data and template histograms
         '''
 
-        #TODO
+        # Get the total template map
+        template_map = self.template_maker.get_outputs(return_sum=True)
+
+        # The the data map
+        data_map = self.data_maker.get_outputs(return_sum=True)
+
+        # Plot
+        template_map.plot(cmap="jet", title="MC")
+        data_map.plot(cmap="jet", title="Data")
+
 
         # # We can get individual outputs from just a pipleine like so. This fetches outputs from the neutrino pipleine, which are 12 maps.
         # maps = template_maker.get_outputs()[0] #TODO This is neutrinos, also get muons
